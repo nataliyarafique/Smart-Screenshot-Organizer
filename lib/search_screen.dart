@@ -1,27 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'main_page.dart';
-
-Future<void> showShotDialog(BuildContext context, Shot s) {
-  return showDialog(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Row(
-        children: [
-          Icon(s.icon, color: s.color),
-          const SizedBox(width: 8),
-          Expanded(child: Text(s.title)),
-        ],
-      ),
-      content: Text('Category: ${s.category}'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: const Text('Close'),
-        ),
-      ],
-    ),
-  );
-}
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -35,10 +14,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final q = query.toLowerCase();
     final results = shots
         .where((s) =>
-    s.title.toLowerCase().contains(query.toLowerCase()) ||
-        s.category.toLowerCase().contains(query.toLowerCase()))
+    s.name.toLowerCase().contains(q) ||
+        s.category.toLowerCase().contains(q))
         .toList();
 
     return Column(
@@ -64,8 +44,13 @@ class _SearchScreenState extends State<SearchScreen> {
             itemBuilder: (context, i) {
               final s = results[i];
               return ListTile(
-                leading: Icon(s.icon, color: s.color, size: 32),
-                title: Text(s.title),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.file(File(s.path),
+                      width: 48, height: 48, fit: BoxFit.cover),
+                ),
+                title: Text(s.name,
+                    maxLines: 1, overflow: TextOverflow.ellipsis),
                 subtitle: Text(s.category),
                 trailing:
                 const Icon(Icons.arrow_forward_ios, size: 16),
