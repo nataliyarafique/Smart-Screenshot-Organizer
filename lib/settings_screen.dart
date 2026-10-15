@@ -19,7 +19,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           secondary: const Icon(Icons.auto_awesome),
           title: const Text('Auto Organize'),
           subtitle: const Text('Naye screenshots khud sort hon'),
-          value: autoOrganize,
+          value: autoOrganize,git commit -m "Updated screens"
           onChanged: (v) => setState(() => autoOrganize = v),
         ),
         SwitchListTile(
